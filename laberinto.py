@@ -1,6 +1,30 @@
 class Game:
     def __init__(self):
         self.maze = None
+
+    def create_wall(self):
+        return Wall()
+    
+    def create_door(self,side1,side2):
+        door=Door(side1,side2)
+        return door  
+    
+    def create_room(self, id):
+        return Room(id)
+
+    def create_maze(self):
+        return Maze()
+    
+    def make2RoomsMazeFM(self):
+        self.maze = self.create_maze()
+        room1 = self.create_room(1)
+        room2 = self.create_room(2)
+        door = self.create_door(room1,room2)
+        room1.south=door
+        room2.north=door
+        self.maze.addRoom(room1)
+        self.maze.addRoom(room2)
+        return self.maze
     
     def make2RoomsMaze(self):
         self.maze = Maze()
@@ -60,7 +84,7 @@ class Wall(MapElement):
         
 
 game=Game()
-game.make2RoomsMaze()
+game.make2RoomsMazeFM()
 game.maze.entrar() 
 
 

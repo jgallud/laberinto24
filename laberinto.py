@@ -38,6 +38,10 @@ class Game:
         room2.north = door
         return self.maze
 
+class BombedGame(Game):
+    def create_wall(self):
+        return BombedWall()
+
 class MapElement:
     def __init__(self):
         pass
@@ -81,9 +85,18 @@ class Wall(MapElement):
         pass # Walls don't need additional attributes
     def entrar(self):
         print("You can't go through walls")
-        
 
-game=Game()
+class BombedWall(Wall):
+    def __init__(self):
+        self.active = False   
+    def entrar(self):
+        if self.active:
+            print("the bomb has detonated")
+        else:
+            return super().entrar()
+
+    
+game=BombedGame()
 game.make2RoomsMazeFM()
 game.maze.entrar() 
 

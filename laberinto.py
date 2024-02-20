@@ -2,24 +2,29 @@ class Game:
     def __init__(self):
         self.maze = None
 
-    def create_wall(self):
+    def createWall(self):
         return Wall()
     
-    def create_door(self,side1,side2):
+    def createDoor(self,side1,side2):
         door=Door(side1,side2)
         return door  
     
-    def create_room(self, id):
-        return Room(id)
+    def createRoom(self, id):
+        room=Room(id)
+        room.north=self.createWall()
+        room.east=self.createWall()
+        room.south=self.createWall()
+        room.west=self.createWall()
+        return room
 
-    def create_maze(self):
+    def createMaze(self):
         return Maze()
     
     def make2RoomsMazeFM(self):
-        self.maze = self.create_maze()
-        room1 = self.create_room(1)
-        room2 = self.create_room(2)
-        door = self.create_door(room1,room2)
+        self.maze = self.createMaze()
+        room1 = self.createRoom(1)
+        room2 = self.createRoom(2)
+        door = self.createDoor(room1,room2)
         room1.south=door
         room2.north=door
         self.maze.addRoom(room1)
@@ -48,7 +53,26 @@ class MapElement:
     def entrar(self):
         pass
 
-class Maze(MapElement):
+class Contenedor(MapElement):
+    def __init__(self):
+        self.hijos=[]
+        
+    def agregarHijo(self, hijo):
+        self.hijos.append(hijo)
+        
+    def eliminarHijo(self, hijo):
+        self.hijos.remove(hijo)
+
+
+class Hoja(MapElement):
+    def accept(self, visitor):
+        visitor.visitHoja(self)
+
+class Decorator(Hoja):
+    def __init__(self, component):
+        self.component = component
+
+class Maze(Contenedor):
     def __init__(self):
         self.rooms = []
     
@@ -58,12 +82,12 @@ class Maze(MapElement):
     def entrar(self):
         self.rooms[0].entrar()  
 
-class Room(MapElement):
+class Room(Contenedor):
     def __init__(self,id):
-        self.north = Wall()
-        self.east = Wall()
-        self.west = Wall()
-        self.south = Wall()
+        self.north = None
+        self.east = None
+        self.west = None
+        self.south = None
         self.id = id
     
     def entrar(self):
@@ -95,7 +119,14 @@ class BombedWall(Wall):
         else:
             return super().entrar()
 
-    
+
+game = Game()
+game.make2RoomsMaze()
+game.maze.entrar()
+
+game = Game()
+game.make2RoomsMazeFM()
+
 game=BombedGame()
 game.make2RoomsMazeFM()
 game.maze.entrar() 

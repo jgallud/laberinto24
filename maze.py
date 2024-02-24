@@ -43,14 +43,23 @@ class Game:
         room2.north = door
 
         return maze
+    
+    def print(self):
+        print("Game")
 
 class BombedGame(Game):
   def makeWall(self):
     return BombedWall()
+
+  def print(self):
+    print("BombedGame")
   
 class MapElement:
     def __init__(self):
         pass
+    
+    def print(self):
+        print("MapElement")
 
 class Container(MapElement):
     # Composite
@@ -62,15 +71,24 @@ class Container(MapElement):
 
     def remove(self, component):
         self._children.remove(component)
+    
+    def print(self):
+        print("Container")
 
 class Leaf(MapElement):
     def __init__(self):
         super().__init__()
+    
+    def print(self):
+        print("Leaf")
 
 class Decorator(Leaf):
     def __init__(self):
         super().__init__()
         self.comp = None
+    
+    def print(self):
+        print("Decorator")
 
 class Bomb(Decorator):
     pass
@@ -81,6 +99,9 @@ class Maze(Container):
 
     def addRoom(self, room):
         self.rooms.append(room)
+    
+    def print(self):
+        print("Maze")
 
 class Room(MapElement):
     def __init__(self, id):
@@ -89,20 +110,32 @@ class Room(MapElement):
         self.south = None
         self.east = None
         self.west = None
+    
+    def print(self):
+        print("Room")
 
 class Wall(MapElement):
     def __init__(self):
         pass
+    
+    def print(self):
+        print("Wall")
 
 class BombedWall(Wall):
     def __init__(self):
         super().__init__()
         self.active = False
+    
+    def print(self):
+        print("BombedWall")
 
 class Door(MapElement):
     def __init__(self, side1, side2):
         self.side1 = side1
         self.side2 = side2
+    
+    def print(self):
+        print("Door")
 
 game = Game()
 game.createMaze2Hab()

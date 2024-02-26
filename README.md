@@ -11,3 +11,13 @@ The Room object has four sides (north, east, west, south), initially each side i
 The Door object has two sides that might be Room objects. 
 The Maze object has an operation addRoom with a Room object as parameter.
 ```
+Decorator prompt:
+```
+include a new class named Decorator. This new class is subclass of MapElement
+```	
+Composite prompt:
+```	
+apply the Composite design pattern to this solution: MapElement is the Component class, Container is subclass of MapElement and Room is subclass of Container class. 
+A new class Leaf is subclass of MapElement.
+Decorator class is now subclass of Leaf
+```

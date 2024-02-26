@@ -1,63 +1,11 @@
-class Game:
-    def __init__(self):
-        self.maze = None
-
-    def makeWall(self):
-        return Wall()
-    
-    def makeDoor(self,room1, room2):
-        door=Door(room1, room2)
-        return door
-
-    def makeRoom(self, id):
-        room=Room(id)
-        room.north=self.makeWall()
-        room.east=self.makeWall()
-        room.south=self.makeWall()
-        room.west=self.makeWall()
-        return room
-
-    def createMaze2Hab(self):
-        maze = Maze()
-        self.maze = maze
-        room1 = Room(1)
-        room2 = Room(2)
-
-        door=Door(room1, room2)
-
-        room1.south = door  
-        room2.north = door
-
-        self.maze.addRoom(room1)
-        self.maze.addRoom(room2)
-
-    def createMaze2HabFM(self):
-        room1 = self.makeRoom(1)
-        room2 = self.makeRoom(2)
-        door = self.makeDoor(room1, room2)
-        maze = Maze()
-        maze.addRoom(room1)
-        maze.addRoom(room2)
-      
-        room1.south = door 
-        room2.north = door
-
-        return maze
-    
-    def print(self):
-        print("Game")
-
-class BombedGame(Game):
-  def makeWall(self):
-    return BombedWall()
-
-  def print(self):
-    print("BombedGame")
-  
+# mapelement.py
 class MapElement:
     def __init__(self):
         pass
     
+    def enter(self):
+        pass
+
     def print(self):
         print("MapElement")
 
@@ -93,6 +41,9 @@ class Decorator(Leaf):
 class Bomb(Decorator):
     pass
 
+
+# maze.py
+
 class Maze(Container):
     def __init__(self):
         self.rooms = []
@@ -100,8 +51,13 @@ class Maze(Container):
     def addRoom(self, room):
         self.rooms.append(room)
     
+    def enter(self):
+        self.rooms[0].enter()
+    
     def print(self):
         print("Maze")
+
+# room.py
 
 class Room(MapElement):
     def __init__(self, id):
@@ -111,8 +67,13 @@ class Room(MapElement):
         self.east = None
         self.west = None
     
+    def enter(self):
+        print("You enter room", self.id)
+
     def print(self):
         print("Room")
+
+# wall.py
 
 class Wall(MapElement):
     def __init__(self):
@@ -120,6 +81,8 @@ class Wall(MapElement):
     
     def print(self):
         print("Wall")
+
+# bombedwall.py
 
 class BombedWall(Wall):
     def __init__(self):
@@ -129,22 +92,18 @@ class BombedWall(Wall):
     def print(self):
         print("BombedWall")
 
+# door.py
+
 class Door(MapElement):
     def __init__(self, side1, side2):
         self.side1 = side1
         self.side2 = side2
+        self.opened = False
     
+    def enter(self):
+        if self.opened:
+            self.side2.enter()
+        else:
+            print("The door is locked")
     def print(self):
         print("Door")
-
-game = Game()
-game.createMaze2Hab()
-
-bgame = BombedGame()
-bgame.createMaze2Hab()
-
-game = Game()
-game.createMaze2HabFM()
-
-
-

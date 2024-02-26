@@ -12,17 +12,42 @@ class MapElement:
 class Container(MapElement):
     # Composite
     def __init__(self):
-        self._children = []
+        self.children = []
 
     def add(self, component):
-        self._children.append(component)
+        self.children.append(component)
 
     def remove(self, component):
-        self._children.remove(component)
+        self.children.remove(component)
     
     def print(self):
         print("Container")
 
+class Maze(Container):
+    def __init__(self):
+        super().__init__()
+
+    def addRoom(self, room):
+        self.children.append(room)
+
+    def enter(self):
+        self.children[0].enter()
+
+    def print(self):
+        print("Maze")   
+class Room(Container):
+    def __init__(self, id):
+        super().__init__()
+        self.id = id
+        self.north = None
+        self.south = None
+        self.east = None
+        self.west = None
+    def enter(self):
+        print("You enter room", self.id)
+    def print(self):
+        print("Room")
+    
 class Leaf(MapElement):
     def __init__(self):
         super().__init__()

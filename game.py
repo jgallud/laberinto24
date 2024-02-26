@@ -21,7 +21,7 @@ class Game:
         room.west=self.makeWall()
         return room
 
-    def createMaze2Hab(self):
+    def createMaze2Room(self):
         maze = Maze()
         self.maze = maze
         room1 = Room(1)
@@ -35,18 +35,17 @@ class Game:
         self.maze.addRoom(room1)
         self.maze.addRoom(room2)
 
-    def createMaze2HabFM(self):
+    def createMaze2RoomFM(self):
         room1 = self.makeRoom(1)
         room2 = self.makeRoom(2)
         door = self.makeDoor(room1, room2)
         maze = Maze()
-        maze.addRoom(room1)
-        maze.addRoom(room2)
+        self.maze = maze
+        self.maze.addRoom(room1)
+        self.maze.addRoom(room2)
       
         room1.south = door 
         room2.north = door
-
-        return maze
     
     def addBeast(self, beast):
         self.beasts.append(beast)
@@ -74,4 +73,14 @@ class BombedGame(Game):
 
   def print(self):
     print("BombedGame")
-  
+
+game = Game()
+game.createMaze2Room()
+game.maze.enter()
+
+game = Game()
+game.createMaze2RoomFM
+
+game=BombedGame()
+game.createMaze2RoomFM()
+game.maze.enter() 

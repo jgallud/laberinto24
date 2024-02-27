@@ -4,6 +4,7 @@ class Beast:
         self.mode = mode
         self.power = 2
         self.life = 10
+        self.position = None
 
 # mode.py
 class Mode:

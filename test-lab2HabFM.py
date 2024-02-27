@@ -1,11 +1,12 @@
 import unittest
-from maze import Game, Maze, Room, Door
+from maze import Maze, Room, Door
+from game import Game
 
 class TestMazeGame(unittest.TestCase):
 
     def test_create_maze(self):
         game = Game()
-        maze = game.createMaze2HabFM()
+        maze = game.createMaze2RoomFM()
         
         self.assertIsInstance(maze, Maze)
         

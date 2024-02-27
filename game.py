@@ -35,6 +35,50 @@ class Game:
         self.maze.addRoom(room1)
         self.maze.addRoom(room2)
 
+    def create4Room2BeastFM(self):
+        room1 = self.makeRoom(1)
+        room2 = self.makeRoom(2)
+        room3 = self.makeRoom(3)
+        room4 = self.makeRoom(4)
+        
+        door12 = self.makeDoor(room1, room2)
+        door13 = self.makeDoor(room1, room3)
+        door24 = self.makeDoor(room2, room4)
+        door34 = self.makeDoor(room3, room4)
+        
+        room1.south = door12
+        room2.north = door12
+        
+        room1.east = door13
+        room3.west = door13
+        
+        room2.east = door24
+        room4.west = door24
+        
+        room3.south = door34
+        room4.north = door34
+        
+        maze = Maze()
+        self.maze = maze
+        
+        maze.addRoom(room1)
+        maze.addRoom(room2)
+        maze.addRoom(room3)
+        maze.addRoom(room4)
+        
+        beast1 = self.makeAggressiveBeast(room1)
+        beast2 = self.makeLazyBeast(room2)  
+        beast3 = self.makeAggressiveBeast(room3)
+        beast4 = self.makeLazyBeast(room4)
+
+        
+        self.beasts.append(beast1)
+        self.beasts.append(beast2)
+        self.beasts.append(beast3)
+        self.beasts.append(beast4)
+
+        return 
+
     def createMaze2RoomFM(self):
         room1 = self.makeRoom(1)
         room2 = self.makeRoom(2)
@@ -53,14 +97,16 @@ class Game:
     def removeBeast(self, beast):
         self.beasts.remove(beast)
     
-    def makeAggressiveBeast(self):
+    def makeAggressiveBeast(self,room):
         beast= Beast(Aggressive())
         beast.power = 5
+        beast.position=room
         return beast
     
-    def makeLazyBeast(self):
+    def makeLazyBeast(self,room):
         beast= Beast(Lazy())
         beast.power = 1
+        beast.position=room
         return beast
     
     def print(self):

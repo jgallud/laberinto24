@@ -9,14 +9,15 @@ class TestGame(unittest.TestCase):
         game.create4Room4BeastFM()
         
         # Check number of rooms
-        self.assertEqual(len(game.maze.rooms), 4)
+        self.assertEqual(len(game.maze.children), 4)
         self.assertEqual(len(game.beasts), 4)
         
         # Check connections between rooms
-        room1 = game.maze.rooms[0]
-        room2 = game.maze.rooms[1]
-        room3 = game.maze.rooms[2]
-        room4 = game.maze.rooms[3]
+        room1 = game.maze.getRoom(1)
+        room2 = game.maze.getRoom(2) 
+        room3 = game.maze.getRoom(3)
+        room4 = game.maze.getRoom(4)
+
         
         self.assertIs(room1.south, room2.north)
         self.assertIs(room1.east, room3.west)

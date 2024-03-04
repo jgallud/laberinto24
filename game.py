@@ -1,4 +1,4 @@
-from maze import Maze, Room, Door, Wall, BombedWall, Bomb 
+from maze import Maze, Room, Door, Wall, BombedWall, Bomb, North, East, South, West
 from beast import Beast, Mode, Aggressive, Lazy
 
 class Game:
@@ -15,11 +15,27 @@ class Game:
 
     def makeRoom(self, id):
         room=Room(id)
+        room.addOrientation(self.makeNorth())
+        room.addOrientation(self.makeEast())
+        room.addOrientation(self.makeSouth())
+        room.addOrientation(self.makeWest())
         room.north=self.makeWall()
         room.east=self.makeWall()
         room.south=self.makeWall()
         room.west=self.makeWall()
         return room
+
+    def makeNorth(self):
+        return North().get_instance()
+
+    def makeEast(self):
+        return East().get_instance()
+    
+    def makeSouth(self):
+        return South().get_instance()
+    
+    def makeWest(self):
+        return West().get_instance()
 
     def createMaze2Room(self):
         maze = Maze()

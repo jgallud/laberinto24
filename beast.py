@@ -13,6 +13,12 @@ class Beast:
 
     def isLazy(self):
         return self.mode.isLazy()
+    
+    def act(self):
+        self.mode.act(self)
+    
+    def walkRandom(self):
+        self.position.walkRandom(self)
 
 class Mode:
     def __init__(self):
@@ -21,6 +27,10 @@ class Mode:
         return False
     def isLazy(self):
         return False
+    def act(self, beast):
+        self.walk(beast)
+    def walk(self, beast):
+        beast.walkRandom()
 
 class Aggressive(Mode):
     def __init__(self):

@@ -17,28 +17,45 @@ class Container(MapElement):
     def __init__(self):
         super().__init__()
         self.children = []
+        self.orientations=[]
 
-    def add(self, component):
+    def addChild(self, component):
         self.children.append(component)
 
-    def remove(self, component):
+    def removeChild(self, component):
         self.children.remove(component)
     
     def print(self):
         print("Container")
+    
+    def walkRandom(self,someone):
+        pass
+    def addOrientation(self, orientation):
+        self.orientations.append(orientation)
+    
+    def removeOrientation(self, orientation):
+        self.orientations.remove(orientation)
+    
 
 class Maze(Container):
     def __init__(self):
         super().__init__()
 
     def addRoom(self, room):
-        self.children.append(room)
+        self.addChild(room)
 
     def enter(self):
         self.children[0].enter()
 
     def print(self):
         print("Maze")   
+    
+    def getRoom(self, id):
+        for room in self.children:
+            if room.id == id:
+                return room
+        return None
+
 
 class Room(Container):
     def __init__(self, id):
@@ -76,39 +93,6 @@ class Bomb(Decorator):
     pass
 
 
-# maze.py
-
-class Maze(Container):
-    def __init__(self):
-        self.rooms = []
-
-    def addRoom(self, room):
-        self.rooms.append(room)
-    
-    def enter(self):
-        self.rooms[0].enter()
-    
-    def print(self):
-        print("Maze")
-
-# room.py
-
-class Room(MapElement):
-    def __init__(self, id):
-        self.id = id
-        self.north = None
-        self.south = None
-        self.east = None
-        self.west = None
-    
-    def enter(self):
-        print("You enter room", self.id)
-
-    def print(self):
-        print("Room")
-
-# wall.py
-
 class Wall(MapElement):
     def __init__(self):
         pass
@@ -141,3 +125,73 @@ class Door(MapElement):
             print("The door is locked")
     def print(self):
         print("Door")
+
+class Orientation:
+    def __init__(self):
+        pass
+
+class North(Orientation):
+    _instance = None
+    def __init__(self):
+        if not North._instance:
+            super().__init__()
+            North._instance = self
+
+    @classmethod
+    def get_instance(cls):
+        if not cls._instance:
+            cls._instance = North()
+        return cls._instance
+
+    def print(self):
+        print("North")
+
+
+class South(Orientation):
+    _instance = None
+    def __init__(self):
+        if not South._instance:
+            super().__init__()  
+            South._instance = self
+
+    @staticmethod 
+    def get_instance():
+        if not South._instance:
+            South()
+        return South._instance
+    
+    def print(self):
+        print("South")
+        
+class East(Orientation):
+    _instance = None
+    def __init__(self):
+        if not East._instance:
+            super().__init__()
+            East._instance = self
+
+    @staticmethod
+    def get_instance():
+        if not East._instance:
+            East()
+        return East._instance
+    
+    def print(self):
+        print("East")
+        
+class West(Orientation):
+    _instance = None
+    def __init__(self):
+        if not West._instance:
+            super().__init__()
+            West._instance = self
+
+    @staticmethod
+    def get_instance():
+        if not West._instance:
+            West()
+        return West._instance
+    
+    def print(self):
+        print("West")
+

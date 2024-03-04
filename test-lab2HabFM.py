@@ -11,7 +11,7 @@ class TestMazeGame(unittest.TestCase):
         
         self.assertIsInstance(maze, Maze)
         
-        rooms = maze.rooms
+        rooms = maze.children
         self.assertEqual(len(rooms), 2)
         
         room1, room2 = rooms

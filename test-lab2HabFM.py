@@ -2,6 +2,7 @@ import unittest
 from maze import Maze, Room, Door
 from game import Game
 
+
 class TestMazeGame(unittest.TestCase):
 
     def test_create_maze(self):

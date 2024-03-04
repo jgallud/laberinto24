@@ -8,10 +8,14 @@ class MapElement:
 
     def print(self):
         print("MapElement")
+    
+    def isRoom(self):
+        return False
 
 class Container(MapElement):
     # Composite
     def __init__(self):
+        super().__init__()
         self.children = []
 
     def add(self, component):
@@ -35,6 +39,7 @@ class Maze(Container):
 
     def print(self):
         print("Maze")   
+
 class Room(Container):
     def __init__(self, id):
         super().__init__()
@@ -45,8 +50,12 @@ class Room(Container):
         self.west = None
     def enter(self):
         print("You enter room", self.id)
+    
     def print(self):
         print("Room")
+
+    def isRoom(self):
+        return True
     
 class Leaf(MapElement):
     def __init__(self):

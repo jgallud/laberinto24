@@ -35,7 +35,7 @@ class Game:
         self.maze.addRoom(room1)
         self.maze.addRoom(room2)
 
-    def create4Room2BeastFM(self):
+    def create4Room4BeastFM(self):
         room1 = self.makeRoom(1)
         room2 = self.makeRoom(2)
         room3 = self.makeRoom(3)
@@ -59,25 +59,25 @@ class Game:
         room4.north = door34
         
         maze = Maze()
-        self.maze = maze
-        
+                
         maze.addRoom(room1)
         maze.addRoom(room2)
         maze.addRoom(room3)
         maze.addRoom(room4)
-        
+        self.maze = maze
+
         beast1 = self.makeAggressiveBeast(room1)
         beast2 = self.makeLazyBeast(room2)  
         beast3 = self.makeAggressiveBeast(room3)
         beast4 = self.makeLazyBeast(room4)
-
-        
+       
         self.beasts.append(beast1)
         self.beasts.append(beast2)
         self.beasts.append(beast3)
         self.beasts.append(beast4)
 
-        return 
+        return maze
+
 
     def createMaze2RoomFM(self):
         room1 = self.makeRoom(1)
@@ -90,6 +90,8 @@ class Game:
       
         room1.south = door 
         room2.north = door
+
+        return maze
     
     def addBeast(self, beast):
         self.beasts.append(beast)
@@ -130,3 +132,6 @@ game.createMaze2RoomFM
 game=BombedGame()
 game.createMaze2RoomFM()
 game.maze.enter() 
+
+game = Game()
+game.create4Room4BeastFM()

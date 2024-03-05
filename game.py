@@ -29,7 +29,7 @@ class Game:
         return North().get_instance()
 
     def makeEast(self):
-        return East().get_instance()
+        return East.instance() #.get_instance()
     
     def makeSouth(self):
         return South().get_instance()

@@ -166,18 +166,27 @@ class South(Orientation):
 class East(Orientation):
     _instance = None
     def __init__(self):
-        if not East._instance:
-            super().__init__()
-            East._instance = self
+        raise RuntimeError('Call instance() instead')
+        # if not East._instance:
+        #     super().__init__()
+        #     East._instance = self
 
-    @staticmethod
-    def get_instance():
-        if not East._instance:
-            East()
-        return East._instance
+    @classmethod
+    def instance(cls):
+        if cls._instance is None:
+            print('Creating new instance')
+            cls._instance = cls.__new__(cls)
+            # Put any initialization here.
+        return cls._instance
     
-    def print(self):
-        print("East")
+    # @staticmethod
+    # def get_instance():
+    #     if not East._instance:
+    #         East()
+    #     return East._instance
+    
+    # def print(self):
+    #     print("East")
         
 class West(Orientation):
     _instance = None

@@ -1,10 +1,22 @@
 from maze import Maze, Room, Door, Wall, BombedWall, Bomb, North, East, South, West
 from beast import Beast, Mode, Aggressive, Lazy
+from threadManager import ThreadManager
+import time
 
 class Game:
     def __init__(self):
         self.maze = None
         self.beasts = []
+        self.threadManager = ThreadManager()
+
+    def launchThreds(self):
+        for beast in self.beasts:
+            self.threadManager.addThread(beast)
+        self.threadManager.start()
+
+    def stopThreds(self):
+        self.threadManager.stop()
+        self.threadManager.join()
 
     def makeWall(self):
         return Wall()
@@ -29,7 +41,7 @@ class Game:
         return North().get_instance()
 
     def makeEast(self):
-        return East.instance() #.get_instance()
+        return East.get_instance()
     
     def makeSouth(self):
         return South().get_instance()
@@ -138,16 +150,21 @@ class BombedGame(Game):
   def print(self):
     print("BombedGame")
 
-game = Game()
-game.createMaze2Room()
-game.maze.enter()
+# game = Game()
+# game.createMaze2Room()
+# game.maze.enter()
 
-game = Game()
-game.createMaze2RoomFM
+# game = Game()
+# game.createMaze2RoomFM
 
-game=BombedGame()
-game.createMaze2RoomFM()
-game.maze.enter() 
+# game=BombedGame()
+# game.createMaze2RoomFM()
+# game.maze.enter() 
 
 game = Game()
 game.create4Room4BeastFM()
+sm="pepe"
+game.maze.enter(sm)
+game.launchThreds()
+time.sleep(10)
+game.stopThreds()

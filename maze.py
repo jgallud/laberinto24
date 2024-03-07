@@ -1,9 +1,11 @@
 # mapelement.py
+import random
+
 class MapElement:
     def __init__(self):
         pass
     
-    def enter(self):
+    def enter(self,someone):
         pass
 
     def print(self):
@@ -35,7 +37,22 @@ class Container(MapElement):
     
     def removeOrientation(self, orientation):
         self.orientations.remove(orientation)
+
+    def walkRandom(self, someone):        
+        orientation = self.getRandomOrientation()
+        orientation.walkRandom(someone)
+
+    def getRandomOrientation(self):
+        return random.choice(self.orientations)
     
+    def goNorth(self, someone):
+        self.north.enter(someone)
+    def goEast(self, someone):
+        self.east.enter(someone)
+    def goSouth(self, someone):
+        self.south.enter(someone)
+    def goWest(self, someone):
+        self.west.enter(someone)
 
 class Maze(Container):
     def __init__(self):
@@ -44,8 +61,8 @@ class Maze(Container):
     def addRoom(self, room):
         self.addChild(room)
 
-    def enter(self):
-        self.children[0].enter()
+    def enter(self,someone):
+        self.children[0].enter(someone)
 
     def print(self):
         print("Maze")   
@@ -55,7 +72,7 @@ class Maze(Container):
             if room.id == id:
                 return room
         return None
-
+   
 
 class Room(Container):
     def __init__(self, id):
@@ -65,8 +82,8 @@ class Room(Container):
         self.south = None
         self.east = None
         self.west = None
-    def enter(self):
-        print("You enter room", self.id)
+    def enter(self,someone):
+        print(someone + " enter room", self.id)
     
     def print(self):
         print("Room")
@@ -90,8 +107,15 @@ class Decorator(Leaf):
         print("Decorator")
 
 class Bomb(Decorator):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.active = False
 
+    def print(self):
+        print("Bomb")
+
+    def enter(self, someone):
+        print(someone + " walked into a bomb")
 
 class Wall(MapElement):
     def __init__(self):
@@ -99,6 +123,9 @@ class Wall(MapElement):
     
     def print(self):
         print("Wall")
+
+    def enter(self, someone):
+        print(someone , " walked into a wall")
 
 # bombedwall.py
 
@@ -118,7 +145,7 @@ class Door(MapElement):
         self.side2 = side2
         self.opened = False
     
-    def enter(self):
+    def enter(self,someone):
         if self.opened:
             self.side2.enter()
         else:
@@ -128,6 +155,8 @@ class Door(MapElement):
 
 class Orientation:
     def __init__(self):
+        pass
+    def walkRandom(self, someone):
         pass
 
 class North(Orientation):
@@ -145,6 +174,9 @@ class North(Orientation):
 
     def print(self):
         print("North")
+    
+    def walkRandom(self, someone):
+        someone.goNorth()
 
 
 class South(Orientation):
@@ -162,6 +194,9 @@ class South(Orientation):
     
     def print(self):
         print("South")
+    
+    def walkRandom(self, someone):
+        someone.goSouth()
         
 class East(Orientation):
     _instance = None
@@ -172,13 +207,15 @@ class East(Orientation):
         #     East._instance = self
 
     @classmethod
-    def instance(cls):
+    def get_instance(cls):
         if cls._instance is None:
             print('Creating new instance')
             cls._instance = cls.__new__(cls)
             # Put any initialization here.
         return cls._instance
     
+    def walkRandom(self, someone):
+        someone.goEast()
     # @staticmethod
     # def get_instance():
     #     if not East._instance:
@@ -203,4 +240,7 @@ class West(Orientation):
     
     def print(self):
         print("West")
+    
+    def walkRandom(self, someone):
+        someone.goWest()
 

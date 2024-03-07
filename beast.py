@@ -8,9 +8,10 @@ class Beast:
         self.life = 10
         self.position = None
         self.mode = mode
+        self.num=0
     
     def __str__(self):
-        template='Beast-{0.mode}'
+        template='Beast-{0.mode}{0.num}'
         return template.format(self)
     
     def isAggressive(self):

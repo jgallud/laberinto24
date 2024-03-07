@@ -99,10 +99,10 @@ class Game:
         beast3 = self.makeAggressiveBeast(room3)
         beast4 = self.makeLazyBeast(room4)
        
-        self.beasts.append(beast1)
-        self.beasts.append(beast2)
-        self.beasts.append(beast3)
-        self.beasts.append(beast4)
+        self.addBeast(beast1)
+        self.addBeast(beast2)
+        self.addBeast(beast3)
+        self.addBeast(beast4)
 
         return maze
 
@@ -122,7 +122,8 @@ class Game:
         return maze
     
     def addBeast(self, beast):
-        self.beasts.append(beast)
+        beast.num=len(self.beasts)+1
+        self.beasts.append(beast)        
 
     def removeBeast(self, beast):
         self.beasts.remove(beast)

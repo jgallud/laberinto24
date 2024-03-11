@@ -53,6 +53,8 @@ class Container(MapElement):
         self.south.enter(someone)
     def goWest(self, someone):
         self.west.enter(someone)
+    def setEMinOr(self, em, orientation):
+        orientation.setEMinOr(em, self)
 
 class Maze(Container):
     def __init__(self):
@@ -158,6 +160,8 @@ class Orientation:
         pass
     def walkRandom(self, someone):
         pass
+    def setEMinOr(self, em, aContainer):
+        pass
 
 class North(Orientation):
     _instance = None
@@ -165,6 +169,8 @@ class North(Orientation):
         if not North._instance:
             super().__init__()
             North._instance = self
+    def setEMinOr(self, em, aContainer):
+        aContainer.north = em
 
     @classmethod
     def get_instance(cls):
@@ -197,7 +203,10 @@ class South(Orientation):
     
     def walkRandom(self, someone):
         someone.goSouth()
-        
+    
+    def setEMinOr(self, em, aContainer):
+        aContainer.south = em
+
 class East(Orientation):
     _instance = None
     def __init__(self):
@@ -216,6 +225,9 @@ class East(Orientation):
     
     def walkRandom(self, someone):
         someone.goEast()
+    
+    def setEMinOr(self, em, aContainer):
+        aContainer.east = em
     # @staticmethod
     # def get_instance():
     #     if not East._instance:
@@ -244,3 +256,5 @@ class West(Orientation):
     def walkRandom(self, someone):
         someone.goWest()
 
+    def setEMinOr(self, em, aContainer):
+        aContainer.west = em

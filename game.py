@@ -162,10 +162,10 @@ class BombedGame(Game):
 # game.createMaze2RoomFM()
 # game.maze.enter() 
 
-game = Game()
-game.create4Room4BeastFM()
-sm="pepe"
-game.maze.enter(sm)
-game.launchThreds()
-time.sleep(10)
-game.stopThreds()
+# game = Game()
+# game.create4Room4BeastFM()
+# sm="pepe"
+# game.maze.enter(sm)
+# game.launchThreds()
+# time.sleep(10)
+# game.stopThreds()

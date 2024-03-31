@@ -1,13 +1,37 @@
 # beast.pyclass Beast:
 import time
 
-class Beast:
+class Creature:
+    def __init__(self):
+        self.position = None
+        self.game=None
+        self.life=None
+        self.power=None
+    
+    def goNorth(self):
+        self.position.goNorth(self)
+    def goEast(self):
+        self.position.goEast(self)
+    def goSouth(self):
+        self.position.goSouth(self)
+    def goWest(self):
+        self.position.goWest(self)
+
+class Person(Creature):
+    def __init__(self, name):
+        super().__init__()
+        self.life=20
+        self.power=1
+        self.name=name
+    def __str__(self):
+        return self.name
+
+class Beast(Creature):
     def __init__(self, mode):
+        super().__init__()
         self.mode = mode
         self.power = 2
         self.life = 10
-        self.position = None
-        self.mode = mode
         self.num=0
     
     def __str__(self):
@@ -26,14 +50,9 @@ class Beast:
     def walkRandom(self):
         self.position.walkRandom(self)
     
-    def goNorth(self):
-        self.position.goNorth(self)
-    def goEast(self):
-        self.position.goEast(self)
-    def goSouth(self):
-        self.position.goSouth(self)
-    def goWest(self):
-        self.position.goWest(self)
+    def attack(self):
+        self.position.attack(self)
+    
     def start(self):
         self.act()
     def stop(self):
@@ -52,11 +71,14 @@ class Mode:
     def act(self, beast):
         self.sleep(beast)
         self.walk(beast)
+        #self.attack(beast)
     def walk(self, beast):
         beast.walkRandom()
     def sleep(self, beast):
         print(beast," is sleeping")
         time.sleep(3)
+    def attack(self,beast):
+        beast.attack()
 
 class Aggressive(Mode):
     def __init__(self):

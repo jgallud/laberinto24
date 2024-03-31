@@ -55,7 +55,7 @@ class Container(MapElement):
         self.west.enter(someone)
     def setEMinOr(self, em, orientation):
         orientation.setEMinOr(em, self)
-
+    
 class Maze(Container):
     def __init__(self):
         super().__init__()
@@ -69,29 +69,32 @@ class Maze(Container):
     def print(self):
         print("Maze")   
     
-    def getRoom(self, id):
+    def getRoom(self, num):
         for room in self.children:
-            if room.id == id:
+            if room.num == num:
                 return room
         return None
    
 
 class Room(Container):
-    def __init__(self, id):
+    def __init__(self, num):
         super().__init__()
-        self.id = id
+        self.num = num
         self.north = None
         self.south = None
         self.east = None
         self.west = None
     def enter(self,someone):
-        print(someone + " enter room", self.id)
+        print(str(someone) + " enter room" + str(self.num))
+        someone.position=self
     
     def print(self):
         print("Room")
 
     def isRoom(self):
         return True
+    def __str__(self):
+        return "Room-" + str(self.num)
     
 class Leaf(MapElement):
     def __init__(self):
@@ -149,11 +152,14 @@ class Door(MapElement):
     
     def enter(self,someone):
         if self.opened:
-            self.side2.enter()
+            if someone.position == self.side1:
+                self.side2.enter(someone)
+            else:
+                self.side1.enter(someone)
         else:
-            print("The door is locked")
-    def print(self):
-        print("Door")
+            print("The door "+str(self)+" is locked")
+    def __str__(self):
+     return "Puerta-"+str(self.side1)+"-"+str(self.side2)
 
 class Orientation:
     def __init__(self):

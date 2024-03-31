@@ -1,5 +1,5 @@
 from maze import Maze, Room, Door, Wall, BombedWall, Bomb, North, East, South, West
-from beast import Beast, Mode, Aggressive, Lazy
+from creatures import Beast, Mode, Aggressive, Lazy, Person
 from threadManager import ThreadManager
 import time
 
@@ -7,6 +7,7 @@ class Game:
     def __init__(self):
         self.maze = None
         self.beasts = []
+        self.person=None
         self.threadManager = ThreadManager()
 
     def launchThreds(self):
@@ -121,8 +122,14 @@ class Game:
 
         return maze
     
+    def addPerson(self,name):
+        self.person = Person(name)
+        self.person.game=self
+        self.maze.enter(self.person)
+
     def addBeast(self, beast):
         beast.num=len(self.beasts)+1
+        beast.game=self
         self.beasts.append(beast)        
 
     def removeBeast(self, beast):

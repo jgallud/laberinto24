@@ -166,7 +166,13 @@ class Game:
                 return beast
         else:
             return None
-        
+    
+    def openDoors(self):
+        print("Opening all doors...")
+        abrirPuertas=lambda each: each.open()
+        self.maze.recorrer(abrirPuertas)
+
+
 # BombedGame.py
 class BombedGame(Game):
   def makeWall(self):

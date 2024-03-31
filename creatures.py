@@ -28,7 +28,7 @@ class Creature:
 class Person(Creature):
     def __init__(self, name):
         super().__init__()
-        self.life=5
+        self.life=20
         self.power=1
         self.name=name
     def __str__(self):

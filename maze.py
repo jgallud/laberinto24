@@ -14,12 +14,27 @@ class MapElement:
     def isRoom(self):
         return False
 
+    def isDoor(self):
+        return False
+    
+    def recorrer(self,unBloque):
+        pass
+    def open(self):
+        pass
+    def recorrer(self,unBloque):
+        unBloque(self)
+
 class Container(MapElement):
     # Composite
     def __init__(self):
         super().__init__()
         self.children = []
         self.orientations=[]
+        self.num = None
+        self.north = None
+        self.south = None
+        self.east = None
+        self.west = None
 
     def addChild(self, component):
         self.children.append(component)
@@ -56,6 +71,15 @@ class Container(MapElement):
     def setEMinOr(self, em, orientation):
         orientation.setEMinOr(em, self)
     
+    def recorrer(self, unBloque):
+        unBloque(self)
+        for child in self.children:
+            child.recorrer(unBloque)
+        for orient in self.orientations:
+            orient.recorrerEn(unBloque,self)
+
+
+    
 class Maze(Container):
     def __init__(self):
         super().__init__()
@@ -79,11 +103,8 @@ class Maze(Container):
 class Room(Container):
     def __init__(self, num):
         super().__init__()
-        self.num = num
-        self.north = None
-        self.south = None
-        self.east = None
-        self.west = None
+        self.num=num
+
     def enter(self,someone):
         print(str(someone) + " enter room" + str(self.num))
         someone.position=self
@@ -160,6 +181,17 @@ class Door(MapElement):
             print("The door "+str(self)+" is locked")
     def __str__(self):
      return "Puerta-"+str(self.side1)+"-"+str(self.side2)
+    
+    def open(self):
+        print("Opening the door between "+str(self.side1)+" and "+str(self.side2))
+        self.opened = True
+    
+    def close(self):
+        print("Closing the door between "+str(self.side1)+" and "+str(self.side2))
+        self.opened = False
+
+    def isDoor(self):
+        return True
 
 class Orientation:
     def __init__(self):
@@ -167,6 +199,8 @@ class Orientation:
     def walkRandom(self, someone):
         pass
     def setEMinOr(self, em, aContainer):
+        pass
+    def recorrerEn(self, unBloque, aContainer):
         pass
 
 class North(Orientation):
@@ -190,6 +224,8 @@ class North(Orientation):
     def walkRandom(self, someone):
         someone.goNorth()
 
+    def recorrerEn(self, unBloque, aContainer):
+        aContainer.north.recorrer(unBloque)
 
 class South(Orientation):
     _instance = None
@@ -212,6 +248,9 @@ class South(Orientation):
     
     def setEMinOr(self, em, aContainer):
         aContainer.south = em
+    
+    def recorrerEn(self, unBloque, aContainer):
+        aContainer.south.recorrer(unBloque)
 
 class East(Orientation):
     _instance = None
@@ -242,6 +281,8 @@ class East(Orientation):
     
     # def print(self):
     #     print("East")
+    def recorrerEn(self, unBloque, aContainer):
+        aContainer.east.recorrer(unBloque)
         
 class West(Orientation):
     _instance = None
@@ -264,3 +305,6 @@ class West(Orientation):
 
     def setEMinOr(self, em, aContainer):
         aContainer.west = em
+
+    def recorrerEn(self, unBloque, aContainer):
+        aContainer.west.recorrer(unBloque)

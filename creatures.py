@@ -16,15 +16,33 @@ class Creature:
         self.position.goSouth(self)
     def goWest(self):
         self.position.goWest(self)
+    def attack(self):
+        enemy=self.findEnemy()
+        if enemy:
+            enemy.isAttackedBy(self)
+    def findEnemy(self):
+        pass
+    def isAttackedBy(self, other):
+        pass
 
 class Person(Creature):
     def __init__(self, name):
         super().__init__()
-        self.life=20
+        self.life=5
         self.power=1
         self.name=name
     def __str__(self):
         return self.name
+    def findEnemy(self):
+        return self.game.findBeast(self.position)
+    def isAttackedBy(self, other):
+        self.life -= other.power
+        print(self, "is attacked by", other)
+        if self.life <= 0:
+            print(self, "is dead, GAME OVER")
+            self.game.stopThreds()
+        else:
+            print(self, "life is now", self.life)
 
 class Beast(Creature):
     def __init__(self, mode):
@@ -50,14 +68,18 @@ class Beast(Creature):
     def walkRandom(self):
         self.position.walkRandom(self)
     
-    def attack(self):
-        self.position.attack(self)
+    #def attack(self):
+    #    self.position.attack(self)
     
     def start(self):
         self.act()
+
     def stop(self):
         print(self , " is stopped")
         exit(0)
+
+    def findEnemy(self):
+        return self.game.findPerson(self.position)
 
 class Mode:
     def __init__(self):
@@ -69,9 +91,10 @@ class Mode:
     def isLazy(self):
         return False
     def act(self, beast):
-        self.sleep(beast)
-        self.walk(beast)
-        #self.attack(beast)
+        while beast.life > 0:
+            self.sleep(beast)
+            self.walk(beast)
+            self.attack(beast)
     def walk(self, beast):
         beast.walkRandom()
     def sleep(self, beast):

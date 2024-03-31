@@ -11,13 +11,17 @@ class Game:
         self.threadManager = ThreadManager()
 
     def launchThreds(self):
+        print("The beasts start to move...")
         for beast in self.beasts:
             self.threadManager.addThread(beast)
         self.threadManager.start()
 
     def stopThreds(self):
-        self.threadManager.stop()
-        self.threadManager.join()
+        print("The beasts ared stopeed...")
+        #self.threadManager.stop()
+        for beast in self.beasts:
+            beast.life=0
+        #self.threadManager.join()
 
     def makeWall(self):
         return Wall()
@@ -149,7 +153,20 @@ class Game:
     
     def print(self):
         print("Game")
-
+    
+    def findPerson(self,unCont):
+        if self.person.position ==unCont:
+            return self.person
+        else:
+            return None
+    
+    def findBeast(self,unCont):
+        for beast in self.beasts:
+            if beast.position == unCont:
+                return beast
+        else:
+            return None
+        
 # BombedGame.py
 class BombedGame(Game):
   def makeWall(self):

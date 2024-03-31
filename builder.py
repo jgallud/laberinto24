@@ -146,6 +146,6 @@ director.procesar('/Users/jose.gallud/CloudStation/asignaturas/diseño de sofwa
 game=director.getGame()
 game.addPerson("Pepe")
 game.launchThreds()
-time.sleep(10)
-game.stopThreds()
+#time.sleep(30)
+#game.stopThreds()
 

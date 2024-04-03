@@ -1,4 +1,6 @@
 import json
+import curses
+
 from game import Game
 from maze import Maze, Room, Door, Wall, Bomb, North, East, South, West
 from creatures import Beast,Aggressive,Lazy
@@ -140,12 +142,53 @@ class LaberintoBuilder:
         beast.position=room
         self.game.addBeast(beast)
 
-director=Director()
-director.procesar('/Users/jose.gallud/CloudStation/asignaturas/diseño de sofware/curso23-24/laberintos/maze2room2beasts.json')
 
-game=director.getGame()
-game.addPerson("Pepe")
-game.openDoors()
-game.launchThreds()
+
+def main(stdscr):
+    # Turn off cursor blinking
+    curses.curs_set(0)
+    # Enable keypad mode
+    stdscr.keypad(True)
+
+    director=Director()
+    director.procesar('/Users/jose.gallud/CloudStation/asignaturas/diseño de sofware/curso23-24/laberintos/maze2room2beasts.json')
+
+    game=director.getGame()
+    game.addPerson("Pepe")
+    person=game.person
+    game.openDoors()
+    game.launchThreds()
+
+    stdscr.clear()
+    stdscr.addstr("Press arrow keys or 'q' to quit.\n")
+
+    while True:
+        key = stdscr.getch()
+        if key == ord('q'):
+            break  # Exit the program
+        elif key == curses.KEY_UP:
+            #stdscr.addstr("Up Arrow Pressed\n")
+            person.goNorth()
+        elif key == curses.KEY_DOWN:
+            #stdscr.addstr("Down Arrow Pressed\n")
+            person.goSouth()
+        elif key == curses.KEY_LEFT:
+            #stdscr.addstr("Left Arrow Pressed\n")
+            person.goWest()
+        elif key == curses.KEY_RIGHT:
+            #stdscr.addstr("Right Arrow Pressed\n")
+            person.goEast()
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            #stdscr.addstr("Enter Pressed\n")
+            person.attack()
+        else:
+            stdscr.addstr("Key Pressed: {}\n".format(chr(key)))
+
+    # Clean up
+    curses.curs_set(1)
+    stdscr.keypad(False)
+
+if __name__ == "__main__":
+    curses.wrapper(main)
 
 

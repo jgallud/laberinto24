@@ -21,6 +21,8 @@ class MapElement:
         pass
     def open(self):
         pass
+    def close(self):
+        pass
     def recorrer(self,unBloque):
         unBloque(self)
 
@@ -106,7 +108,7 @@ class Room(Container):
         self.num=num
 
     def enter(self,someone):
-        print(str(someone) + " enter room" + str(self.num))
+        print(str(someone) + " enter room" + str(self.num)+"\n")
         someone.position=self
     
     def print(self):
@@ -115,7 +117,7 @@ class Room(Container):
     def isRoom(self):
         return True
     def __str__(self):
-        return "Room-" + str(self.num)
+        return "Room-" + str(self.num)+"\n"
     
 class Leaf(MapElement):
     def __init__(self):
@@ -141,7 +143,7 @@ class Bomb(Decorator):
         print("Bomb")
 
     def enter(self, someone):
-        print(someone + " walked into a bomb")
+        print(someone + " walked into a bomb"+"\n")
 
 class Wall(MapElement):
     def __init__(self):
@@ -151,7 +153,7 @@ class Wall(MapElement):
         print("Wall")
 
     def enter(self, someone):
-        print(someone , " walked into a wall")
+        print(someone , " walked into a wall"+"\n")
 
 # bombedwall.py
 
@@ -178,16 +180,16 @@ class Door(MapElement):
             else:
                 self.side1.enter(someone)
         else:
-            print("The door "+str(self)+" is locked")
+            print("The door "+str(self)+" is locked"+"\n")
     def __str__(self):
      return "Puerta-"+str(self.side1)+"-"+str(self.side2)
     
     def open(self):
-        print("Opening the door between "+str(self.side1)+" and "+str(self.side2))
+        print("Opening the door between "+str(self.side1)+" and "+str(self.side2)+"\n")
         self.opened = True
     
     def close(self):
-        print("Closing the door between "+str(self.side1)+" and "+str(self.side2))
+        print("Closing the door between "+str(self.side1)+" and "+str(self.side2)+"\n")
         self.opened = False
 
     def isDoor(self):

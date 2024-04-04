@@ -172,6 +172,10 @@ class Game:
         abrirPuertas=lambda each: each.open()
         self.maze.recorrer(abrirPuertas)
 
+    def closeDoors(self):
+        print("Closing all doors...")
+        cerrarPuertas=lambda each: each.close()
+        self.maze.recorrer(cerrarPuertas)
 
 # BombedGame.py
 class BombedGame(Game):

@@ -31,12 +31,8 @@ class Container(MapElement):
     def __init__(self):
         super().__init__()
         self.children = []
-        self.orientations=[]
-        self.num = None
-        self.north = None
-        self.south = None
-        self.east = None
-        self.west = None
+        self.num = None    
+        self.form = None    
 
     def addChild(self, component):
         self.children.append(component)
@@ -50,37 +46,40 @@ class Container(MapElement):
     def walkRandom(self,someone):
         pass
     def addOrientation(self, orientation):
-        self.orientations.append(orientation)
+        #self.orientations.append(orientation)
+        self.form.addOrientation(orientation)
     
     def removeOrientation(self, orientation):
-        self.orientations.remove(orientation)
+        #self.orientations.remove(orientation)
+        self.form.removeOrientation(orientation)
 
     def walkRandom(self, someone):        
-        orientation = self.getRandomOrientation()
+        orientation = self.form.getRandomOrientation()
         orientation.walkRandom(someone)
-
-    def getRandomOrientation(self):
-        return random.choice(self.orientations)
-    
+   
     def goNorth(self, someone):
-        self.north.enter(someone)
+        #self.north.enter(someone)
+        self.form.goNorth(someone)
     def goEast(self, someone):
-        self.east.enter(someone)
+        #self.east.enter(someone)
+        self.form.goEast(someone)
     def goSouth(self, someone):
-        self.south.enter(someone)
+        #self.south.enter(someone)
+        self.form.goSouth(someone)
     def goWest(self, someone):
-        self.west.enter(someone)
+        #self.west.enter(someone)
+        self.form.goWest(someone)
     def setEMinOr(self, em, orientation):
-        orientation.setEMinOr(em, self)
+        #orientation.setEMinOr(em, self)
+        self.form.setEMinOr(em, orientation)
     
     def recorrer(self, unBloque):
         unBloque(self)
         for child in self.children:
             child.recorrer(unBloque)
-        for orient in self.orientations:
-            orient.recorrerEn(unBloque,self)
-
-
+        self.form.recorrer(unBloque)
+        #for orient in self.orientations:
+        #    orient.recorrerEn(unBloque,self)
     
 class Maze(Container):
     def __init__(self):
@@ -100,7 +99,10 @@ class Maze(Container):
             if room.num == num:
                 return room
         return None
-   
+    def recorrer(self, unBloque):
+        unBloque(self)
+        for child in self.children:
+            child.recorrer(unBloque)
 
 class Room(Container):
     def __init__(self, num):
@@ -118,6 +120,8 @@ class Room(Container):
         return True
     def __str__(self):
         return "Room-" + str(self.num)+"\n"
+    def getOrientations(self):
+        return self.form.orientations
     
 class Leaf(MapElement):
     def __init__(self):
@@ -310,3 +314,34 @@ class West(Orientation):
 
     def recorrerEn(self, unBloque, aContainer):
         aContainer.west.recorrer(unBloque)
+
+class Form:
+    def __init__(self):
+        self.orientations = []
+    def addOrientation(self, orientation):
+        self.orientations.append(orientation)   
+    def removeOrientation(self, orientation):
+        self.orientations.remove(orientation)
+    def getRandomOrientation(self):
+        return random.choice(self.orientations)
+    def setEMinOr(self, em, orientation):
+        orientation.setEMinOr(em, self)
+    def recorrer(self,unBloque):
+        for orient in self.orientations:
+            orient.recorrerEn(unBloque,self)
+
+class Rectangle(Form):
+    def __init__(self):
+        super().__init__()
+        self.north = None
+        self.south = None
+        self.east = None
+        self.west = None
+    def goNorth(self, someone):
+        self.north.enter(someone)
+    def goEast(self, someone):
+        self.east.enter(someone)
+    def goSouth(self, someone):
+        self.south.enter(someone)
+    def goWest(self, someone):
+        self.west.enter(someone)

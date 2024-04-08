@@ -3,7 +3,7 @@ import json
 import keyboard
 
 from game import Game
-from maze import Maze, Room, Door, Wall, Bomb, North, East, South, West
+from maze import Maze, Room, Door, Wall, Bomb, Rectangle, North, East, South, West
 from creatures import Beast,Aggressive,Lazy
 import time
 
@@ -77,7 +77,10 @@ class LaberintoBuilder:
     def makeGame(self):
         self.game = Game()
         self.game.maze = self.maze
-            
+
+    def makeForm(self):
+        return Rectangle()
+     
     def makeMaze(self):
         self.maze= Maze()
     
@@ -95,12 +98,13 @@ class LaberintoBuilder:
 
     def makeRoom(self, num):
         room=Room(num)
+        room.form=self.makeForm()
         room.addOrientation(self.makeNorth())
         room.addOrientation(self.makeEast())
         room.addOrientation(self.makeSouth())
         room.addOrientation(self.makeWest())
-        for each in room.orientations:
-            each.setEMinOr(self.makeWall(), room)
+        for each in room.getOrientations():
+            each.setEMinOr(self.makeWall(), room.form)
         self.maze.addRoom(room)
         return room
 
@@ -153,7 +157,7 @@ def main(): #stdscr
 
     director=Director()
     
-    director.procesar('xxxxxx.json')
+    director.procesar('path-tu-laberinto.json')
 
     game=director.getGame()
     game.addPerson("Pepe")

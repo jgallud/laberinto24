@@ -17,7 +17,7 @@ class Game:
         self.threadManager.start()
 
     def stopThreds(self):
-        print("The beasts ared stopeed...")
+        print("The beasts ared stopped...")
         #self.threadManager.stop()
         for beast in self.beasts:
             beast.life=0

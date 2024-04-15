@@ -52,6 +52,9 @@ class Container(MapElement):
     def removeOrientation(self, orientation):
         #self.orientations.remove(orientation)
         self.form.removeOrientation(orientation)
+    
+    def getOrientations(self):
+        return self.form.orientations
 
     def walkRandom(self, someone):        
         orientation = self.form.getRandomOrientation()
@@ -103,6 +106,8 @@ class Maze(Container):
         unBloque(self)
         for child in self.children:
             child.recorrer(unBloque)
+    def getOrientations(self):
+        pass
 
 class Room(Container):
     def __init__(self, num):
@@ -119,9 +124,7 @@ class Room(Container):
     def isRoom(self):
         return True
     def __str__(self):
-        return "Room-" + str(self.num)+"\n"
-    def getOrientations(self):
-        return self.form.orientations
+        return "Room-" + str(self.num)+"\n"    
     
 class Leaf(MapElement):
     def __init__(self):
@@ -129,6 +132,15 @@ class Leaf(MapElement):
     
     def print(self):
         print("Leaf")
+
+class Tunnel(Leaf):
+    def __init__(self):
+        super().__init__()
+        self.maze = None
+    def enter(self,someone):
+        print(str(someone) + " enter Tunnel"+"\n")
+        self.maze=someone.game.cloneMaze()
+        self.maze.enter(someone)
 
 class Decorator(Leaf):
     def __init__(self):
@@ -315,6 +327,111 @@ class West(Orientation):
     def recorrerEn(self, unBloque, aContainer):
         aContainer.west.recorrer(unBloque)
 
+class Northeast(Orientation):
+    _instance = None
+    
+    def __init__(self):
+        if not Northeast._instance:
+            super().__init__()
+            Northeast._instance = self
+
+    @staticmethod
+    def get_instance():
+        if not Northeast._instance:
+            Northeast()
+        return Northeast._instance
+
+    def print(self):
+        print("Northeast")
+
+    def walkRandom(self, someone):
+        someone.goNortheast()
+
+    def setEMinOr(self, em, aContainer):
+        aContainer.northeast = em
+
+    def recorrerEn(self, unBloque, aContainer):
+        aContainer.northeast.recorrer(unBloque)
+        
+class Northwest(Orientation):
+    _instance = None
+    
+    def __init__(self):
+        if not Northwest._instance:
+            super().__init__()
+            Northwest._instance = self
+
+    @staticmethod
+    def get_instance():
+        if not Northwest._instance:
+            Northwest()
+        return Northwest._instance
+
+    def print(self):
+        print("Northwest")
+
+    def walkRandom(self, someone):
+        someone.goNorthwest()
+
+    def setEMinOr(self, em, aContainer):
+        aContainer.northwest = em
+
+    def recorrerEn(self, unBloque, aContainer):
+        aContainer.northwest.recorrer(unBloque)
+        
+class Southeast(Orientation):
+    _instance = None
+    
+    def __init__(self):
+        if not Southeast._instance:
+            super().__init__()
+            Southeast._instance = self
+
+    @staticmethod
+    def get_instance():
+        if not Southeast._instance:
+            Southeast()
+        return Southeast._instance
+
+    def print(self):
+        print("Southeast")
+
+    def walkRandom(self, someone):
+        someone.goSoutheast()
+
+    def setEMinOr(self, em, aContainer):
+        aContainer.southeast = em
+
+    def recorrerEn(self, unBloque, aContainer):
+        aContainer.southeast.recorrer(unBloque)
+        
+class Southwest(Orientation):
+    _instance = None
+    
+    def __init__(self):
+        if not Southwest._instance:
+            super().__init__()
+            Southwest._instance = self
+
+    @staticmethod
+    def get_instance():
+        if not Southwest._instance:
+            Southwest()
+        return Southwest._instance
+
+    def print(self):
+        print("Southwest")
+
+    def walkRandom(self, someone):
+        someone.goSouthwest()
+
+    def setEMinOr(self, em, aContainer):
+        aContainer.southwest = em
+
+    def recorrerEn(self, unBloque, aContainer):
+        aContainer.southwest.recorrer(unBloque)
+
+
 class Form:
     def __init__(self):
         self.orientations = []
@@ -337,6 +454,13 @@ class Rectangle(Form):
         self.south = None
         self.east = None
         self.west = None
+        self.addAllOrientations()
+
+    def addAllOrientations(self):
+        self.addOrientation(North.get_instance())
+        self.addOrientation(South.get_instance())
+        self.addOrientation(East.get_instance())
+        self.addOrientation(West.get_instance())
     def goNorth(self, someone):
         self.north.enter(someone)
     def goEast(self, someone):
@@ -345,3 +469,41 @@ class Rectangle(Form):
         self.south.enter(someone)
     def goWest(self, someone):
         self.west.enter(someone)
+
+class Hexagon(Form):
+    def __init__(self):
+        super().__init__()
+        self.north = None
+        self.northeast = None
+        self.southeast = None
+        self.south = None
+        self.southwest = None
+        self.northwest = None
+        self.addAllOrientations()
+    def addAllOrientations(self):
+        self.addOrientation(North.get_instance())
+        self.addOrientation(Northeast.get_instance())
+        self.addOrientation(Southeast.get_instance())
+        self.addOrientation(South.get_instance())
+        self.addOrientation(Southwest.get_instance())
+        self.addOrientation(Northwest.get_instance())
+
+    def goNorth(self, someone):
+        self.north.enter(someone)
+
+    def goNortheast(self, someone):
+        self.northeast.enter(someone)
+
+    def goSoutheast(self, someone):
+        self.southeast.enter(someone)
+
+    def goSouth(self, someone):
+        self.south.enter(someone)
+
+    def goSouthwest(self, someone):
+        self.southwest.enter(someone)
+
+    def goNorthwest(self, someone):
+        self.northwest.enter(someone)
+
+

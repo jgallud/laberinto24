@@ -1,6 +1,7 @@
-from maze import Maze, Room, Door, Wall, BombedWall, Bomb, North, East, South, West
+from maze import Maze, Room, Door, Wall, BombedWall, Bomb, North, East, South, West, Northeast, Southeast, Southwest, Northwest
 from creatures import Beast, Mode, Aggressive, Lazy, Person
 from threadManager import ThreadManager
+import copy
 import time
 
 class Game:
@@ -8,6 +9,7 @@ class Game:
         self.maze = None
         self.beasts = []
         self.person=None
+        self.prototype = None
         self.threadManager = ThreadManager()
 
     def launchThreds(self):
@@ -53,7 +55,19 @@ class Game:
     
     def makeWest(self):
         return West().get_instance()
+    
+    def makeSoutheast(self):
+        return Southeast().get_instance()
 
+    def makeSouthwest(self):
+        return Southwest().get_instance()
+
+    def makeNortheast(self):
+        return Northeast().get_instance()
+
+    def makeNorthwest(self):
+        return Northwest().get_instance()
+      
     def createMaze2Room(self):
         maze = Maze()
         self.maze = maze
@@ -176,6 +190,10 @@ class Game:
         print("Closing all doors...")
         cerrarPuertas=lambda each: each.close()
         self.maze.recorrer(cerrarPuertas)
+    
+    def cloneMaze(self):
+              self.maze_clone = copy.deepcopy(self.maze)
+      
 
 # BombedGame.py
 class BombedGame(Game):

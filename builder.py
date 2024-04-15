@@ -3,17 +3,18 @@ import json
 import keyboard
 
 from game import Game
-from maze import Maze, Room, Door, Wall, Bomb, Rectangle, North, East, South, West
+from maze import Maze, Room, Door, Wall, Bomb, Rectangle, Hexagon, North, East, South, West, Northeast, Southeast, Southwest, Northwest
 from creatures import Beast,Aggressive,Lazy
 import time
 
 class Director:
     def __init__(self):
         self.dict=None
-        self.builder=LaberintoBuilder()
+        self.builder=None
 
     def procesar(self,filename):
         self.leer_archivo(filename)
+        self.iniBuilder()
         self.crear_laberinto()
         self.crear_game()
         self.crear_beasts()
@@ -27,6 +28,15 @@ class Director:
             print(f"File {filename} does not exist")
             return None
     
+    def iniBuilder(self):
+        if (self.dict['form'] == 'rectangle'):
+            self.builder=LaberintoBuilder()
+        elif (self.dict['form'] == 'hexagon'):
+            self.builder=LaberintoHexagonalBuilder()
+        else:
+            print("Form not found")
+            return None
+
     def getGame(self):
         return self.builder.getGame()
 
@@ -76,7 +86,8 @@ class LaberintoBuilder:
     
     def makeGame(self):
         self.game = Game()
-        self.game.maze = self.maze
+        self.prototype =self.maze
+        self.game.maze = self.game.cloneMaze()
 
     def makeForm(self):
         return Rectangle()
@@ -99,10 +110,10 @@ class LaberintoBuilder:
     def makeRoom(self, num):
         room=Room(num)
         room.form=self.makeForm()
-        room.addOrientation(self.makeNorth())
-        room.addOrientation(self.makeEast())
-        room.addOrientation(self.makeSouth())
-        room.addOrientation(self.makeWest())
+        # room.addOrientation(self.makeNorth())
+        # room.addOrientation(self.makeEast())
+        # room.addOrientation(self.makeSouth())
+        # room.addOrientation(self.makeWest())
         for each in room.getOrientations():
             each.setEMinOr(self.makeWall(), room.form)
         self.maze.addRoom(room)
@@ -147,7 +158,18 @@ class LaberintoBuilder:
         beast.position=room
         self.game.addBeast(beast)
 
-
+class LaberintoHexagonalBuilder(LaberintoBuilder):
+    def makeForm(self):
+        return Hexagon()
+    
+    def makeRoom(self):
+        room = Room()
+        room.form = self.makeForm()                           
+        for each in room.getOrientations():
+            each.setEMinOr(self.makeWall(), room.form)
+        self.maze.addRoom(room)
+        return room
+      
 
 def main(): #stdscr
     # Turn off cursor blinking
@@ -157,7 +179,7 @@ def main(): #stdscr
 
     director=Director()
     
-    director.procesar('path-tu-laberinto.json')
+    director.procesar('C:\\Users\\jgallud\\CloudStation\\asignaturas\\diseño de sofware\\curso23-24\\laberintos\\maze2room.json')
 
     game=director.getGame()
     game.addPerson("Pepe")

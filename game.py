@@ -192,7 +192,7 @@ class Game:
         self.maze.recorrer(cerrarPuertas)
     
     def cloneMaze(self):
-              self.maze_clone = copy.deepcopy(self.maze)
+        return copy.deepcopy(self.prototype)
       
 
 # BombedGame.py

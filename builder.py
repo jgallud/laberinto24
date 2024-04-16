@@ -86,7 +86,7 @@ class LaberintoBuilder:
     
     def makeGame(self):
         self.game = Game()
-        self.prototype =self.maze
+        self.game.prototype =self.maze
         self.game.maze = self.game.cloneMaze()
 
     def makeForm(self):
@@ -179,7 +179,7 @@ def main(): #stdscr
 
     director=Director()
     
-    director.procesar('C:\\Users\\jgallud\\CloudStation\\asignaturas\\diseño de sofware\\curso23-24\\laberintos\\maze2room.json')
+    director.procesar('xxxxxxxxxxxxxxxxxxxxxxx\\laberintos\\maze2room.json')
 
     game=director.getGame()
     game.addPerson("Pepe")
@@ -189,7 +189,8 @@ def main(): #stdscr
     
     #stdscr.clear()
     #stdscr.addstr("Press arrow keys or 'q' to quit.\n")
-
+    
+    
     while True:
         if keyboard.is_pressed('q'):
             break  # Exit the program
@@ -214,7 +215,7 @@ def main(): #stdscr
     # Clean up
     #curses.curs_set(1)
     #stdscr.keypad(False)
-
+    
 main()
 
 

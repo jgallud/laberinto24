@@ -190,7 +190,7 @@ class Door(MapElement):
         self.opened = False
     
     def enter(self,someone):
-        if self.opened:
+        if (self.opened):
             if someone.position == self.side1:
                 self.side2.enter(someone)
             else:
@@ -198,7 +198,7 @@ class Door(MapElement):
         else:
             print("The door "+str(self)+" is locked"+"\n")
     def __str__(self):
-     return "Puerta-"+str(self.side1)+"-"+str(self.side2)
+        return "Puerta-"+str(self.side1)+"-"+str(self.side2)
     
     def open(self):
         print("Opening the door between "+str(self.side1)+" and "+str(self.side2)+"\n")

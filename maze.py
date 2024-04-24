@@ -1,9 +1,42 @@
 # mapelement.py
 import random
 
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+class Command:
+    def __init__(self, receptor):
+        self.receptor = receptor
+    
+    def execute(self):
+        pass
+    def isEnter(self):
+        return False
+
+class Open(Command):
+    def execute(self):
+        self.receptor.removeCommand(self)
+        self.receptor.addCommand(Close(self.receptor))
+        self.receptor.addCommand(Enter(self.receptor))
+        self.receptor.open()
+
+class Close(Command):
+    def execute(self):
+        self.receptor.removeCommand(self)
+        self.receptor.addCommand(Open(self.receptor))
+        self.receptor.close()
+
+class Enter(Command):
+    def execute(self):
+        self.receptor.enter()
+    def isEnter(self):
+        return True
+
 class MapElement:
     def __init__(self):
-        pass
+        self.commands = []
     
     def enter(self,someone):
         pass
@@ -25,6 +58,13 @@ class MapElement:
         pass
     def recorrer(self,unBloque):
         unBloque(self)
+        
+    def addCommand(self, command):
+        self.commands.append(command)
+    def removeCommand(self, command):
+        self.commands.remove(command)
+    def getCommands(self):
+        return self.commands
 
 class Container(MapElement):
     # Composite
@@ -33,6 +73,12 @@ class Container(MapElement):
         self.children = []
         self.num = None    
         self.form = None    
+    
+    def getPoint(self):
+        return self.form.getPoint()
+
+    def setPoint(self, point):
+        self.form.setPoint(point)
 
     def addChild(self, component):
         self.children.append(component)
@@ -83,7 +129,17 @@ class Container(MapElement):
         self.form.recorrer(unBloque)
         #for orient in self.orientations:
         #    orient.recorrerEn(unBloque,self)
-    
+    def getCommands(self):
+        lista=[]
+        lista += self.commands
+        for child in self.children:
+            lista += child.getCommands()
+        lista += self.form.getCommands()
+        return lista	
+
+    def calcularPosicion(self):
+        self.form.calcularPosicion()    
+
 class Maze(Container):
     def __init__(self):
         super().__init__()
@@ -171,6 +227,8 @@ class Wall(MapElement):
     def enter(self, someone):
         print(someone , " walked into a wall"+"\n")
 
+    def calcularPosicionDesde(self,aForm,aPoint):
+        pass
 # bombedwall.py
 
 class BombedWall(Wall):
@@ -185,9 +243,11 @@ class BombedWall(Wall):
 
 class Door(MapElement):
     def __init__(self, side1, side2):
+        super().__init__()
         self.side1 = side1
         self.side2 = side2
         self.opened = False
+        self.visited = False
     
     def enter(self,someone):
         if (self.opened):
@@ -210,6 +270,17 @@ class Door(MapElement):
 
     def isDoor(self):
         return True
+    def calcularPosicionDesde(self,aForm,aPoint):
+        if self.visited:
+            return  
+        self.visited = True
+        if aForm.num==self.side1.num:
+            self.side2.setPoint(aPoint)
+            self.side2.calcularPosicion()
+        else:
+            self.side1.setPoint(aPoint)
+            self.side1.calcularPosicion()
+
 
 class Orientation:
     def __init__(self):
@@ -219,6 +290,10 @@ class Orientation:
     def setEMinOr(self, em, aContainer):
         pass
     def recorrerEn(self, unBloque, aContainer):
+        pass
+    def getCommands(self,aForm):
+        pass
+    def calcularPosicionDesde(self,aForm):
         pass
 
 class North(Orientation):
@@ -244,6 +319,12 @@ class North(Orientation):
 
     def recorrerEn(self, unBloque, aContainer):
         aContainer.north.recorrer(unBloque)
+    
+    def getCommands(self,aForm):
+        return aForm.north.getCommands()
+    def calcularPosicionDesde(self, aForm):
+        unPunto=Point(aForm.point.x,aForm.point.y-1)
+        aForm.north.calcularPosicionDesde(aForm,unPunto)
 
 class South(Orientation):
     _instance = None
@@ -269,6 +350,12 @@ class South(Orientation):
     
     def recorrerEn(self, unBloque, aContainer):
         aContainer.south.recorrer(unBloque)
+
+    def getCommands(self,aForm):
+        return aForm.south.getCommands()
+    def calcularPosicionDesde(self, aForm):
+        unPunto=Point(aForm.point.x,aForm.point.y+1)
+        aForm.south.calcularPosicionDesde(aForm,unPunto)
 
 class East(Orientation):
     _instance = None
@@ -301,7 +388,12 @@ class East(Orientation):
     #     print("East")
     def recorrerEn(self, unBloque, aContainer):
         aContainer.east.recorrer(unBloque)
-        
+    def getCommands(self,aForm):
+        return aForm.east.getCommands()
+    def calcularPosicionDesde(self, aForm):
+        unPunto=Point(aForm.point.x+1,aForm.point.y)
+        aForm.east.calcularPosicionDesde(aForm,unPunto)
+
 class West(Orientation):
     _instance = None
     def __init__(self):
@@ -326,6 +418,12 @@ class West(Orientation):
 
     def recorrerEn(self, unBloque, aContainer):
         aContainer.west.recorrer(unBloque)
+
+    def getCommands(self,aForm):
+        return aForm.west.getCommands()
+    def calcularPosicionDesde(self, aForm):
+        unPunto=Point(aForm.point.x-1,aForm.point.y)
+        aForm.west.calcularPosicionDesde(aForm,unPunto)
 
 class Northeast(Orientation):
     _instance = None
@@ -435,6 +533,10 @@ class Southwest(Orientation):
 class Form:
     def __init__(self):
         self.orientations = []
+        self.point = None
+        self.extent=None
+        self.num=None
+
     def addOrientation(self, orientation):
         self.orientations.append(orientation)   
     def removeOrientation(self, orientation):
@@ -446,10 +548,23 @@ class Form:
     def recorrer(self,unBloque):
         for orient in self.orientations:
             orient.recorrerEn(unBloque,self)
+    def getCommand(self):
+        lista=[]
+        for orient in self.orientations:
+            lista += orient.getCommandFrom(self)
+        return lista
+    def setPoint(self,point):
+        self.point=point
+    def getPoint(self):
+        return self.point
+    def calcularPosicion(self):
+        for orient in self.orientations:
+            orient.calcularPosicionDesde(self)
 
 class Rectangle(Form):
-    def __init__(self):
+    def __init__(self,num):
         super().__init__()
+        self.num=num
         self.north = None
         self.south = None
         self.east = None

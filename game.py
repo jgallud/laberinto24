@@ -12,6 +12,9 @@ class Game:
         self.prototype = None
         self.threadManager = ThreadManager()
 
+    def getRoom(self, id):
+        return self.maze.getRoom(id)
+    
     def launchThreds(self):
         print("The beasts start to move...")
         for beast in self.beasts:

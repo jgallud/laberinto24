@@ -3,7 +3,7 @@ import json
 import keyboard
 
 from game import Game
-from maze import Maze, Room, Door, Wall, Bomb, Rectangle, Hexagon, North, East, South, West, Northeast, Southeast, Southwest, Northwest
+from maze import Maze, Room, Door, Wall, Bomb, Rectangle, Hexagon, North, East, South, West, Northeast, Southeast, Southwest, Northwest,Open,Close,Enter
 from creatures import Beast,Aggressive,Lazy
 import time
 
@@ -89,8 +89,8 @@ class LaberintoBuilder:
         self.game.prototype =self.maze
         self.game.maze = self.game.cloneMaze()
 
-    def makeForm(self):
-        return Rectangle()
+    def makeForm(self,num):
+        return Rectangle(num)
      
     def makeMaze(self):
         self.maze= Maze()
@@ -109,7 +109,7 @@ class LaberintoBuilder:
 
     def makeRoom(self, num):
         room=Room(num)
-        room.form=self.makeForm()
+        room.form=self.makeForm(num)
         # room.addOrientation(self.makeNorth())
         # room.addOrientation(self.makeEast())
         # room.addOrientation(self.makeSouth())
@@ -139,7 +139,7 @@ class LaberintoBuilder:
         or2 = getattr(self, 'make'+otra_or_string)()
         
         pt = Door(lado1, lado2)
-        
+        pt.addCommand(Open(pt))
         lado1.setEMinOr(pt,or1) 
         lado2.setEMinOr(pt,or2)
 
@@ -171,51 +171,30 @@ class LaberintoHexagonalBuilder(LaberintoBuilder):
         return room
       
 
-def main(): #stdscr
-    # Turn off cursor blinking
-    #curses.curs_set(0)
-    # Enable keypad mode
-    #stdscr.keypad(True)
+# def main(): #stdscr
 
-    director=Director()
+#     director=Director()
+#     director.procesar('C:\\Users\\jgallud\\CloudStation\\asignaturas\\diseño de sofware\\curso23-24\\laberintos\\maze2room.json')
+#     game=director.getGame()
+#     game.addPerson("Pepe")
+#     person=game.person
+#     game.openDoors()
+#     #game.launchThreds()
     
-    director.procesar('xxxxxxxxxxxxxxxxxxxxxxx\\laberintos\\maze2room.json')
-
-    game=director.getGame()
-    game.addPerson("Pepe")
-    person=game.person
-    game.openDoors()
-    game.launchThreds()
-    
-    #stdscr.clear()
-    #stdscr.addstr("Press arrow keys or 'q' to quit.\n")
-    
-    
-    while True:
-        if keyboard.is_pressed('q'):
-            break  # Exit the program
-        elif keyboard.is_pressed("w"): #curses.KEY_UP:
-            #stdscr.addstr("Up Arrow Pressed\n")
-            person.goNorth()
-        elif keyboard.is_pressed("s"): #curses.KEY_DOWN:
-            #stdscr.addstr("Down Arrow Pressed\n")
-            person.goSouth()
-        elif keyboard.is_pressed("a"): #curses.KEY_LEFT:
-            #stdscr.addstr("Left Arrow Pressed\n")
-            person.goWest()
-        elif keyboard.is_pressed("d"): #curses.KEY_RIGHT:
-            #stdscr.addstr("Right Arrow Pressed\n")
-            person.goEast()
-        elif keyboard.is_pressed("enter"):#curses.KEY_ENTER or key in [10, 13]:
-            #stdscr.addstr("Enter Pressed\n")
-            person.attack()
-        #else:
-            #stdscr.addstr("Key Pressed: {}\n".format(chr(key)))
-    game.stopThreds()
-    # Clean up
-    #curses.curs_set(1)
-    #stdscr.keypad(False)
-    
-main()
+#     while True:
+#         if keyboard.is_pressed('q'):
+#             break  # Exit the program
+#         elif keyboard.is_pressed("w"): #curses.KEY_UP:
+#             person.goNorth()
+#         elif keyboard.is_pressed("s"): #curses.KEY_DOWN:
+#             person.goSouth()
+#         elif keyboard.is_pressed("a"): #curses.KEY_LEFT:
+#             person.goWest()
+#         elif keyboard.is_pressed("d"): #curses.KEY_RIGHT:
+#             person.goEast()
+#         elif keyboard.is_pressed("enter"):#curses.KEY_ENTER or key in [10, 13]:
+#             person.attack()
+#     game.stopThreds()
+# main()
 
 

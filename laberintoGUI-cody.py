@@ -10,7 +10,7 @@ class RectApp(tk.Tk):
         self.person=None
 
         director=Director()
-        director.procesar('C:\\Users\\jgallud\\CloudStation\\asignaturas\\diseño de sofware\\curso23-24\\laberintos\\maze2room.json')
+        director.procesar('xxxxxx\\laberintos\\maze2room.json')
         self.game=director.getGame()
 
         self.title("Dibujar Rectángulos")

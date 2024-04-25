@@ -187,11 +187,13 @@ class Game:
     def openDoors(self):
         print("Opening all doors...")
         abrirPuertas=lambda each: each.open()
+        #eval('add(3,4)',{'__builtins__':None},dispatcher)
         self.maze.recorrer(abrirPuertas)
 
     def closeDoors(self):
         print("Closing all doors...")
         cerrarPuertas=lambda each: each.close()
+
         self.maze.recorrer(cerrarPuertas)
     
     def cloneMaze(self):

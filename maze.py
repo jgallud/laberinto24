@@ -65,6 +65,8 @@ class MapElement:
         self.commands.remove(command)
     def getCommands(self):
         return self.commands
+    def accept(self,visitor):
+        pass
 
 class Container(MapElement):
     # Composite
@@ -138,8 +140,8 @@ class Container(MapElement):
         return lista	
 
     def calcularPosicion(self):
-        self.form.calcularPosicion()    
-
+        self.form.calcularPosicion()  
+    
 class Maze(Container):
     def __init__(self):
         super().__init__()
@@ -161,7 +163,8 @@ class Maze(Container):
     def recorrer(self, unBloque):
         unBloque(self)
         for child in self.children:
-            child.recorrer(unBloque)
+            child.recorrer(unBloque)        
+
     def getOrientations(self):
         pass
 
@@ -171,7 +174,7 @@ class Room(Container):
         self.num=num
 
     def enter(self,someone):
-        print(str(someone) + " enter room" + str(self.num)+"\n")
+        print(str(someone) + " enter room" + str(self.num))
         someone.position=self
     
     def print(self):
@@ -180,7 +183,9 @@ class Room(Container):
     def isRoom(self):
         return True
     def __str__(self):
-        return "Room-" + str(self.num)+"\n"    
+        return "Room-" + str(self.num)    
+    def accept(self, visitor):
+        visitor.visitRoom(self)
     
 class Leaf(MapElement):
     def __init__(self):
@@ -225,7 +230,7 @@ class Wall(MapElement):
         print("Wall")
 
     def enter(self, someone):
-        print(someone , " walked into a wall"+"\n")
+        print(someone , " walked into a wall")
 
     def calcularPosicionDesde(self,aForm,aPoint):
         pass
@@ -256,16 +261,16 @@ class Door(MapElement):
             else:
                 self.side1.enter(someone)
         else:
-            print("The door "+str(self)+" is locked"+"\n")
+            print("The door "+str(self)+" is locked")
     def __str__(self):
         return "Puerta-"+str(self.side1)+"-"+str(self.side2)
     
     def open(self):
-        print("Opening the door between "+str(self.side1)+" and "+str(self.side2)+"\n")
+        print("Opening the door between "+str(self.side1)+" and "+str(self.side2))
         self.opened = True
     
     def close(self):
-        print("Closing the door between "+str(self.side1)+" and "+str(self.side2)+"\n")
+        print("Closing the door between "+str(self.side1)+" and "+str(self.side2))
         self.opened = False
 
     def isDoor(self):

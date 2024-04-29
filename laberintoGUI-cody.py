@@ -10,10 +10,10 @@ class RectApp(tk.Tk):
         self.person=None
 
         director=Director()
-        director.procesar('xxxxxx\\laberintos\\maze2room.json')
+        director.procesar('C:\\Users\\jgallud\\CloudStation\\asignaturas\\diseño de sofware\\curso23-24\\laberintos\\maze2room.json')
         self.game=director.getGame()
 
-        self.title("Dibujar Rectángulos")
+        self.title("Laberinto rectangular")
         self.geometry("1150x900")
         self.menubar = tk.Menu(self)
         
@@ -44,15 +44,17 @@ class RectApp(tk.Tk):
         self.game.addPerson("Pepe")
         self.person=self.game.person
         
-        self.canvas = tk.Canvas(self, width=300, height=300, bg="white")
+        self.canvas = tk.Canvas(self, width=1100, height=650, bg="white")
         self.canvas.pack(expand=True)
         self.mostrarLaberinto()
+        self.agregarPersonaje('Pepe')
+        self.dibujarLaberinto()
 
     def mostrarLaberinto(self):
         self.calcularPosicion()
         self.normalizar()
-	    #self.calcularDimensiones
-	    #self.asignarPuntosReales
+        self.calcularDimensiones()
+        self.asignarPuntosReales()
     
     def calcularPosicion(self):
         if not(self.game):
@@ -73,16 +75,43 @@ class RectApp(tk.Tk):
             point=h.getPoint()
             h.setPoint(Point(point.x+abs(minX),point.y+abs(minY)))
 
-    def draw_rect(self,x1,y1,width,height):
-       # width = int(input("Ingrese el ancho del rectángulo: "))
-        #height = int(input("Ingrese el alto del rectángulo: "))
-        
-        #x1 = 10
-        #y1 = 10
+    def calcularDimensiones(self):
+        maxX = 0
+        maxY = 0
+        for h in self.game.maze.children:
+            if h.getPoint().x > maxX:
+                maxX = h.getPoint().x
+            if h.getPoint().y > maxY:
+                maxY = h.getPoint().y
+        maxX += 1
+        maxY += 1
+        self.ancho = (1050 / maxX)
+        self.alto = (600 / maxY)
+
+    def asignarPuntosReales(self):
+        origen=Point(10,10)
+        for h in self.game.maze.children:
+            x=origen.x+h.getPoint().x*self.ancho
+            y=origen.y+h.getPoint().y*self.alto
+            h.setPoint(Point(x,y))
+            h.setExtent(Point(self.ancho,self.alto))           
+    
+    def agregarPersonaje(self,name):
+        self.game.addPerson(name)
+        self.person=self.game.person
+
+    def dibujarLaberinto(self):
+        if not(self.game):
+            return
+        self.game.maze.accept(self)
+
+    def draw_rect(self,x1,y1,width,height):       
         x2 = x1 + width
         y2 = y1 + height
         
-        self.canvas.create_rectangle(x1, y1, x2, y2, fill="red")
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill="white")
+    def visitRoom(self,room):
+        self.draw_rect(room.getPoint().x,room.getPoint().y,room.getExtent().x,room.getExtent().y)
         
     def button1_click(self):
         self.game.launchThreds()

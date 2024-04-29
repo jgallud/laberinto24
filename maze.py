@@ -81,7 +81,11 @@ class Container(MapElement):
 
     def setPoint(self, point):
         self.form.setPoint(point)
-
+    def getExtent(self):
+        return self.form.extent
+    def setExtent(self, extent):
+        self.form.extent=extent
+    
     def addChild(self, component):
         self.children.append(component)
 
@@ -167,6 +171,9 @@ class Maze(Container):
 
     def getOrientations(self):
         pass
+    def accept(self, visitor):
+        for child in self.children:
+            child.accept(visitor)   
 
 class Room(Container):
     def __init__(self, num):

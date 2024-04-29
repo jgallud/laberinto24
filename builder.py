@@ -148,12 +148,12 @@ class LaberintoBuilder:
     def makeLazyBeast(self):
         return Beast(Lazy())
     def makeAggressiveBeastPosition(self, num):
-        room=self.maze.getRoom(num)
+        room=self.game.getRoom(num)
         beast=self.makeAggressiveBeast()
         beast.position=room
         self.game.addBeast(beast)
     def makeLazyBeastPosition(self, num):
-        room=self.maze.getRoom(num)
+        room=self.game.getRoom(num)
         beast=self.makeLazyBeast()
         beast.position=room
         self.game.addBeast(beast)

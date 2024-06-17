@@ -1,6 +1,8 @@
 import unittest
-from maze import Room
-from game import Game
+import sys
+sys.path.append('C:\\developer\\git\\laberinto24')
+from solution.maze import *
+from solution.game import *
 
 class TestGame(unittest.TestCase):
 

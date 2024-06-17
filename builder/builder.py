@@ -1,10 +1,13 @@
 import json
 #import curses
 import keyboard
+import sys
+import os
+sys.path.append(os.getcwd())
 
-from game import Game
-from maze import Maze, Room, Door, Wall, Bomb, Rectangle, Hexagon, North, East, South, West, Northeast, Southeast, Southwest, Northwest,Open,Close,Enter
-from creatures import Beast,Aggressive,Lazy
+from solution.game import Game
+from solution.maze import Maze, Room, Door, Wall, Bomb, Rectangle, Hexagon, North, East, South, West, Northeast, Southeast, Southwest, Northwest,Open,Close,Enter
+from solution.creatures import Beast,Aggressive,Lazy
 import time
 
 class Director:
@@ -174,7 +177,7 @@ class LaberintoHexagonalBuilder(LaberintoBuilder):
 def main(): #stdscr
 
     director=Director()
-    director.procesar('C:\\Users\\jgallud\\CloudStation\\asignaturas\\diseño de sofware\\curso23-24\\laberintos\\maze2room.json')
+    director.procesar(os.getcwd()+'\\json\\maze2room.json')
     game=director.getGame()
     game.addPerson("Pepe")
     person=game.person

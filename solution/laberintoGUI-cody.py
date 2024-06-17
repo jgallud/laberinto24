@@ -1,7 +1,10 @@
 import tkinter as tk
 #import keyboard
-from builder import Director
-from maze import Point
+import sys
+import os
+sys.path.append(os.getcwd())
+from builder.builder import *
+from solution.maze import Point
 
 class RectApp(tk.Tk):
     def __init__(self):
@@ -10,7 +13,7 @@ class RectApp(tk.Tk):
         self.person=None
 
         director=Director()
-        director.procesar('C:\\Users\\jgallud\\CloudStation\\asignaturas\\diseño de sofware\\curso23-24\\laberintos\\maze2room.json')
+        director.procesar(os.getcwd() + '\\json\\maze2room.json')
         self.game=director.getGame()
 
         self.title("Laberinto rectangular")

@@ -1,6 +1,6 @@
-from maze import Maze, Room, Door, Wall, BombedWall, Bomb, North, East, South, West, Northeast, Southeast, Southwest, Northwest, Rectangle
-from creatures import Beast, Mode, Aggressive, Lazy, Person
-from threadManager import ThreadManager
+from .maze import Maze, Room, Door, Wall, BombedWall, Bomb, North, East, South, West, Northeast, Southeast, Southwest, Northwest, Rectangle
+from solution.creatures import Beast, Mode, Aggressive, Lazy, Person
+from solution.threadManager import ThreadManager
 import copy
 import time
 

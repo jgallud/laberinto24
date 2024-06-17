@@ -1,6 +1,10 @@
 import unittest
-from maze import Maze, Room, Door
-from game import Game
+import sys
+import os
+sys.path.append(os.getcwd())
+#from solution.maze import Maze, Room, Door
+from solution.maze import *
+from solution.game import Game
 
 
 class TestMazeGame(unittest.TestCase):
